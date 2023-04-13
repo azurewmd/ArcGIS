@@ -51,7 +51,7 @@ public class Geometry
 public class FeatureLayerQuery : MonoBehaviour
 {
     // The feature layer we are going to query
-    public string FeatureLayerURL = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Major_League_Baseball_Stadiums/FeatureServer/0";
+    public string FeatureLayerURL = "https://runtime.maps.arcgis.com/home/item.html?id=d89b8f400b2a4cd4a262b8b8101fa346&view=service#overview";
     
     // This prefab will be instatiated for each feature we parse
     public GameObject StadiumPrefab;
@@ -113,9 +113,12 @@ public class FeatureLayerQuery : MonoBehaviour
     {
         string[] OutFields =
         {
-            "LEAGUE",
-            "TEAM",
-            "NAME"
+             //genus
+            "Gattung",
+            //crown size
+            "Krone Durchschnitt (m)",
+            //height
+            "Höhe (m)"
         };
 
         string OutFieldHeader = "outFields=";

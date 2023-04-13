@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 4
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 261.85736, g: 324.42407, b: 429.44516, a: 1}
+  m_IndirectSpecularColor: {r: 262.3369, g: 325.0498, b: 430.21924, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -283,8 +283,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91838849}
-  m_LocalRotation: {x: 0.1609856, y: 0.52743524, z: -0.102484055, w: 0.82788455}
-  m_LocalPosition: {x: -0.0055016084, y: 297000, z: -0.42612866}
+  m_LocalRotation: {x: -0.38300055, y: 0.8509316, z: 0.34006855, w: 0.11653019}
+  m_LocalPosition: {x: -4376444, y: -5114920.5, z: 4896694.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -356,6 +356,7 @@ MonoBehaviour:
   horizontalFov: 88.76051
   viewportSizeX: 878
   viewportSizeY: 518
+  qualityScalingFactor: 1
 --- !u!114 &91838855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,9 +546,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IsInitialized: 1
   m_LocalPosition:
-    x: -2371019.7248142264
-    y: 3904527.2583592343
-    z: -4861310.850246893
+    x: -2371019.720687084
+    y: 3904527.251519034
+    z: -4861310.841784997
   m_LocalRotation:
     value:
       x: -0.30086097
@@ -1769,15 +1770,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c703502c1493f5b4eb3e95b2efe0271e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiKey: 
+  apiKey: AAPKe478fbf4f5d4444590dd5edb8dd4fe8cjpQLr7Wg9zYTa-olY6ZEa8imniFAq_DthSGRHgRIaeDi7pJ9jO41s_oF1i6KSTHw
   basemap: https://www.arcgis.com/home/item.html?id=ea3befe305494bb5b2acd77e1b3135dc
   basemapType: 0
   basemapAuthentication:
     ConfigurationIndex: -1
   elevation: https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer
-  enableExtent: 0
   elevationAuthentication:
     ConfigurationIndex: -1
+  elevationSources:
+  - Name: 
+    Type: 0
+    Source: https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer
+    IsEnabled: 1
+    Authentication:
+      ConfigurationIndex: -1
+  enableExtent: 0
   extent:
     GeographicCenter:
       x: 0
@@ -1790,8 +1798,8 @@ MonoBehaviour:
       y: 0
   layers: []
   originPosition:
-    x: -116
-    y: 36
+    x: 9.9872
+    y: 53.5488
     z: 3000
     SRWkid: 4326
   mapType: 0
@@ -1803,6 +1811,7 @@ MonoBehaviour:
   RootChanged:
     m_PersistentCalls:
       m_Calls: []
+  version: 1
 --- !u!114 &1808036066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1816,15 +1825,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_LocalPosition:
-    x: -2265688.757531073
-    y: 3729955.0315881697
-    z: -4645350.36338898
+    x: 3741933.028426564
+    y: 5109479.318787086
+    z: 658941.8401171559
   m_LocalRotation:
     value:
-      x: -0.4423541
-      y: 0.20043294
-      z: 0.10212549
-      w: 0.86817044
+      x: -0.20106412
+      y: -0.7275458
+      z: -0.23956455
+      w: 0.6106219
 --- !u!114 &1808036067
 MonoBehaviour:
   m_ObjectHideFlags: 0
