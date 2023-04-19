@@ -1160,11 +1160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c395c22f6e7a74c4a8ede3782042cc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FeatureLayerURL: https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Major_League_Baseball_Stadiums/FeatureServer/0
-  StadiumPrefab: {fileID: 6815625023641715184, guid: e1518c14a09eb5e4e9287179e0c981a5, type: 3}
-  Stadiums: []
+  FeatureLayerURL: https://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Baumkataster_Berlin/FeatureServer/0
+  TreePrefab: {fileID: 6865095365647609902, guid: a0f2f5d70f407074e8dfb27ae22631f6, type: 3}
+  Trees: []
   ArcGISCamera: {fileID: 91838854}
-  StadiumSelector: {fileID: 338373441}
 --- !u!1 &916334022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,16 +1784,16 @@ MonoBehaviour:
     IsEnabled: 1
     Authentication:
       ConfigurationIndex: -1
-  enableExtent: 0
+  enableExtent: 1
   extent:
     GeographicCenter:
-      x: 0
-      y: 0
+      x: 9.9872
+      y: 53.5488
       z: 0
       SRWkid: 4326
     ExtentShape: 0
     ShapeDimensions:
-      x: 0
+      x: 3000
       y: 0
   layers: []
   originPosition:

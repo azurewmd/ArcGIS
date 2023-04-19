@@ -28,15 +28,15 @@ public class Feature
 {
     public string type;
     public Geometry geometry;
-    public BaseballProperties properties;
+    public TreeProperties properties;
 }
 
 [System.Serializable]
-public class BaseballProperties
+public class TreeProperties
 {
-    public string LEAGUE;
-    public string TEAM;
-    public string NAME;
+    public string genus;
+    public string crown;
+    public string height;
 }
 
 [System.Serializable]
@@ -51,35 +51,32 @@ public class Geometry
 public class FeatureLayerQuery : MonoBehaviour
 {
     // The feature layer we are going to query
-    public string FeatureLayerURL = "https://runtime.maps.arcgis.com/home/item.html?id=d89b8f400b2a4cd4a262b8b8101fa346&view=service#overview";
-    
-    // This prefab will be instatiated for each feature we parse
-    public GameObject StadiumPrefab;
+    public string FeatureLayerURL = "https://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Baumkataster_Berlin/FeatureServer/0";
 
-    // The height where we spawn the stadium before finding the ground height
-    private int StadiumSpawnHeight = 10000;
+    // This prefab will be instatiated for each feature we parse
+    public GameObject TreePrefab;
+
+    private int TreeSpawnHeight = 10000;
 
     // This will hold a reference to each feature we created
-    public List<GameObject> Stadiums = new List<GameObject>();
+    public List<GameObject> Trees = new List<GameObject>();
 
     // In the query request we can denote the Spatial Reference we want the return geometries in.
     // It is important that we create the GameObjects with the same Spatial Reference
     private int FeatureSRWKID = 4326;
 
-    // This camera reference will be passed to the stadiums to calculate the distance from the camera to each stadium
     public ArcGISCameraComponent ArcGISCamera;
 
-    public Dropdown StadiumSelector;
 
     // Get all the features when the script starts
     void Start()
     {
         StartCoroutine(GetFeatures());
-
+/*
         StadiumSelector.onValueChanged.AddListener(delegate
         {
             StadiumSelected();
-        });
+        });*/
     }
 
     // Sends the Request to get features from the service
@@ -99,7 +96,7 @@ public class FeatureLayerQuery : MonoBehaviour
         else
         {
             CreateGameObjectsFromResponse(Request.downloadHandler.text);
-            PopulateStadiumDropdown();
+        //    PopulateStadiumDropdown();
         }
     }
 
@@ -114,19 +111,19 @@ public class FeatureLayerQuery : MonoBehaviour
         string[] OutFields =
         {
              //genus
-            "Gattung",
+            "gattung",
             //crown size
-            "Krone Durchschnitt (m)",
+            "kronedurch",
             //height
-            "Höhe (m)"
+            "baumhoehe"
         };
 
         string OutFieldHeader = "outFields=";
         for (int i = 0; i < OutFields.Length; i++)
         {
             OutFieldHeader += OutFields[i];
-            
-            if(i < OutFields.Length - 1)
+
+            if (i < OutFields.Length - 1)
             {
                 OutFieldHeader += ",";
             }
@@ -167,63 +164,25 @@ public class FeatureLayerQuery : MonoBehaviour
             double Longitude = feature.geometry.coordinates[0];
             double Latitude = feature.geometry.coordinates[1];
 
-            ArcGISPoint Position = new ArcGISPoint(Longitude, Latitude, StadiumSpawnHeight, new ArcGISSpatialReference(FeatureSRWKID));
+            ArcGISPoint Position = new ArcGISPoint(Longitude, Latitude, TreeSpawnHeight, new ArcGISSpatialReference(FeatureSRWKID));
 
-            var NewStadium = Instantiate(StadiumPrefab, this.transform);
-            NewStadium.name = feature.properties.NAME;
-            Stadiums.Add(NewStadium);
-            NewStadium.SetActive(true);
+            var NewTree = Instantiate(TreePrefab, this.transform);
+            //   NewStadium.name = feature.properties.NAME;
+            Trees.Add(NewTree);
+            NewTree.SetActive(true);
 
-            var LocationComponent = NewStadium.GetComponent<ArcGISLocationComponent>();
+            var LocationComponent = NewTree.GetComponent<ArcGISLocationComponent>();
             LocationComponent.enabled = true;
             LocationComponent.Position = Position;
 
-            var StadiumInfo = NewStadium.GetComponent<StadiumInfo>();
+            var TreeInfo = NewTree.GetComponent<Tree>();
 
-            StadiumInfo.SetInfo(feature.properties.NAME);
-            StadiumInfo.SetInfo(feature.properties.TEAM);
-            StadiumInfo.SetInfo(feature.properties.LEAGUE);
+            TreeInfo.SetInfo(feature.properties.genus);
+            TreeInfo.SetInfo(feature.properties.crown);
+            TreeInfo.SetInfo(feature.properties.height);
 
-            StadiumInfo.ArcGISCamera = ArcGISCamera;
-            StadiumInfo.SetSpawnHeight(StadiumSpawnHeight);
-        }
-    }
-
-    // Populates the stadium drown down with all the stadium names from the Stadiums list
-    private void PopulateStadiumDropdown()
-    {
-        //Populate Stadium name drop down
-        List<string> StadiumNames = new List<string>();
-        foreach (GameObject Stadium in Stadiums)
-        {
-            StadiumNames.Add(Stadium.name);
-        }
-        StadiumNames.Sort();
-        StadiumSelector.AddOptions(StadiumNames);
-    }
-
-    // When a new entry is selected in the stadium dropdown move the camera to the new position
-    private void StadiumSelected()
-    {
-        var StadiumName = StadiumSelector.options[StadiumSelector.value].text;
-        foreach (GameObject Stadium in Stadiums)
-        {
-            if(StadiumName == Stadium.name)
-            {
-                var StadiumLocation = Stadium.GetComponent<ArcGISLocationComponent>();
-                if (StadiumLocation == null)
-                {
-                    return;
-                }
-                var CameraLocation = ArcGISCamera.GetComponent<ArcGISLocationComponent>();
-                double Longitude = StadiumLocation.Position.X;
-                double Latitude  = StadiumLocation.Position.Y;
-
-                ArcGISPoint NewPosition = new ArcGISPoint(Longitude, Latitude, StadiumSpawnHeight, StadiumLocation.Position.SpatialReference);
-
-                CameraLocation.Position = NewPosition;
-                CameraLocation.Rotation = StadiumLocation.Rotation;
-            }
+            TreeInfo.ArcGISCamera = ArcGISCamera;
+            TreeInfo.SetSpawnHeight(TreeSpawnHeight);
         }
     }
 }
