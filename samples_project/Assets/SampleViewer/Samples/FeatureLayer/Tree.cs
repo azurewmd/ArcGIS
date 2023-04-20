@@ -3,7 +3,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
 //
-
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Esri.ArcGISMapsSDK.Components;
@@ -24,8 +24,7 @@ public class Tree : MonoBehaviour
     private double SpawnHeight = 10000;
     public double RayCastDistanceThreshold = 300000;
     private bool OnGround = false;
-    private int Counter = 0;
-    public int UpdatesPerRayCast = 200;
+
 
     public void SetInfo(string Info)
     {
@@ -33,9 +32,6 @@ public class Tree : MonoBehaviour
 
         // Based on which leage team belongs to, either the national or american league, we will render the stadium differently
         // See StadiumMaterial.shadergraph for how this is being accomplished
-
-       
-
     }
 
     // Used to tell this object how high it was spawned so we can control the distance of the raycast
@@ -46,24 +42,7 @@ public class Tree : MonoBehaviour
 
     public void Start()
     {
-        // Starting the counter at a random value makes it so we won't do raycast calculation on the same tick
-        Counter = Random.Range(0, UpdatesPerRayCast);
-    }
-
-    public void Update()
-    {
-        // Check each object every UpdatesPerRayCast updates to see if it was placed on the ground yet
-        if (OnGround)
-        {
-            return;
-        }
-
-        Counter++;
-        if (Counter >= UpdatesPerRayCast)
-        {
-            Counter = 0;
-            SetOnGround();
-        }
+        StartCoroutine(SetOnGround());
     }
 
     // This Feature Layer does not contain information about the feature's altitude.
@@ -73,28 +52,36 @@ public class Tree : MonoBehaviour
     // at so the hit test wouldn't work for objects that don't have loaded terrain underneath them
     // Another way to get the elevation would be to query/identify the elevation service you are using for each
     // feature to discover the altitude
-    private void SetOnGround()
+
+
+    private IEnumerator SetOnGround()
     {
-        var CameraHP = ArcGISCamera.GetComponent<HPTransform>();
-        var HP = transform.GetComponent<HPTransform>();
-        var Distance = (CameraHP.UniversePosition - HP.UniversePosition).ToVector3().magnitude;
+        while(!OnGround)
+		{
+            var CameraHP = ArcGISCamera.GetComponent<HPTransform>();
+            var HP = transform.GetComponent<HPTransform>();
+            var Distance = (CameraHP.UniversePosition - HP.UniversePosition).ToVector3().magnitude;
 
-        if (Distance < RayCastDistanceThreshold)
-        {
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, (float)SpawnHeight))
+            if (Distance < RayCastDistanceThreshold)
             {
-                // Modify the Stadiums altitude based off the raycast hit
-                var TreeLocationComponent = transform.GetComponent<ArcGISLocationComponent>();
-                double NewHeight = TreeLocationComponent.Position.Z - hitInfo.distance;
-                double TreeLongitude = TreeLocationComponent.Position.X;
-                double TreeLatitude = TreeLocationComponent.Position.Y;
-                ArcGISPoint Position = new ArcGISPoint(TreeLongitude, TreeLatitude, NewHeight, TreeLocationComponent.Position.SpatialReference);
-                TreeLocationComponent.Position = Position;
+                if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, (float)SpawnHeight))
+                {
+                    // Modify the Stadiums altitude based off the raycast hit
+                    var TreeLocationComponent = transform.GetComponent<ArcGISLocationComponent>();
+                    double NewHeight = TreeLocationComponent.Position.Z - hitInfo.distance;
+                    double TreeLongitude = TreeLocationComponent.Position.X;
+                    double TreeLatitude = TreeLocationComponent.Position.Y;
+                    ArcGISPoint Position = new ArcGISPoint(TreeLongitude, TreeLatitude, NewHeight, TreeLocationComponent.Position.SpatialReference);
+                    TreeLocationComponent.Position = Position;
 
-                OnGround = true;
-
+                    OnGround = true;
+                    MeshRenderer treeMeshRenderer = GetComponent<MeshRenderer>();
+                    treeMeshRenderer.enabled = true;
+                }
             }
+            yield return null;
         }
+        
     }
 
 }

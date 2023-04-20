@@ -66,17 +66,17 @@ public class FeatureLayerQuery : MonoBehaviour
     private int FeatureSRWKID = 4326;
 
     public ArcGISCameraComponent ArcGISCamera;
-
+    public Dropdown TreeSelector;
 
     // Get all the features when the script starts
     void Start()
     {
         StartCoroutine(GetFeatures());
-/*
-        StadiumSelector.onValueChanged.AddListener(delegate
+
+        TreeSelector.onValueChanged.AddListener(delegate
         {
-            StadiumSelected();
-        });*/
+            TreeSelected();
+        });
     }
 
     // Sends the Request to get features from the service
@@ -95,8 +95,9 @@ public class FeatureLayerQuery : MonoBehaviour
         }
         else
         {
+           
             CreateGameObjectsFromResponse(Request.downloadHandler.text);
-        //    PopulateStadiumDropdown();
+            PopulateTreeDropdown();
         }
     }
 
@@ -105,7 +106,8 @@ public class FeatureLayerQuery : MonoBehaviour
     // where=1=1 gets every feature. geometry based or more intelligent where clauses should be used
     //     with larger datasets
     // outSR=4326 gets the return geometries in the SR 4326
-    // outFields=LEAGUE,TEAM,NAME specifies the fields we want in the response
+    // outFields specifies the fields we want in the response
+    // only getting the first 500 of the trees for the performance purpose
     private string MakeRequestHeaders()
     {
         string[] OutFields =
@@ -128,13 +130,14 @@ public class FeatureLayerQuery : MonoBehaviour
                 OutFieldHeader += ",";
             }
         }
-
+        string district = "Mitte";
         string[] RequestHeaders =
         {
             "f=geojson",
-            "where=1=1",
+            $"where=bezirk%3D%27{district}%27",
             "outSR=" + FeatureSRWKID.ToString(),
-            OutFieldHeader
+            OutFieldHeader,
+            "resultRecordCount=500"
         };
 
         string ReturnValue = "";
@@ -158,7 +161,7 @@ public class FeatureLayerQuery : MonoBehaviour
     {
         // Deserialize the JSON response from the query.
         var deserialized = JsonUtility.FromJson<FeatureCollectionData>(Response);
-
+        int counter = 0;
         foreach (Feature feature in deserialized.features)
         {
             double Longitude = feature.geometry.coordinates[0];
@@ -167,7 +170,9 @@ public class FeatureLayerQuery : MonoBehaviour
             ArcGISPoint Position = new ArcGISPoint(Longitude, Latitude, TreeSpawnHeight, new ArcGISSpatialReference(FeatureSRWKID));
 
             var NewTree = Instantiate(TreePrefab, this.transform);
-            //   NewStadium.name = feature.properties.NAME;
+            
+            NewTree.name = feature.properties.genus +"_"+counter.ToString();
+            counter++;
             Trees.Add(NewTree);
             NewTree.SetActive(true);
 
@@ -183,6 +188,45 @@ public class FeatureLayerQuery : MonoBehaviour
 
             TreeInfo.ArcGISCamera = ArcGISCamera;
             TreeInfo.SetSpawnHeight(TreeSpawnHeight);
+        }
+
+    }
+
+
+    private void PopulateTreeDropdown()
+    {
+
+        List<string> TreeNames = new List<string>();
+        foreach (GameObject tree in Trees)
+        {
+            TreeNames.Add(tree.name);
+        }
+        TreeNames.Sort();
+        TreeSelector.AddOptions(TreeNames);
+    }
+
+
+    private void TreeSelected()
+    {
+        var TreeName = TreeSelector.options[TreeSelector.value].text;
+        foreach (GameObject tree in Trees)
+        {
+            if (TreeName == tree.name)
+            {
+                var TreeLocation = tree.GetComponent<ArcGISLocationComponent>();
+                if (TreeLocation == null)
+                {
+                    return;
+                }
+                var CameraLocation = ArcGISCamera.GetComponent<ArcGISLocationComponent>();
+                double Longitude = TreeLocation.Position.X;
+                double Latitude = TreeLocation.Position.Y;
+                double CameraAltitude = TreeLocation.Position.Z + 20;
+                ArcGISPoint NewPosition = new ArcGISPoint(Longitude, Latitude, CameraAltitude, TreeLocation.Position.SpatialReference);
+
+                CameraLocation.Position = NewPosition;
+                CameraLocation.Rotation = TreeLocation.Rotation;
+            }
         }
     }
 }

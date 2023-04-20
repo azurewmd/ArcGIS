@@ -316,14 +316,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position:
-    x: -116
-    y: 36
-    z: 300000
+    x: -116.00000000000001
+    y: 36.000000000000014
+    z: 299999.99999999994
     SRWkid: 4326
   rotation:
-    Heading: 65
-    Pitch: 68
-    Roll: 0
+    Heading: 64.999999615974
+    Pitch: 67.99999929944107
+    Roll: 359.9999984017386
 --- !u!114 &91838853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,8 +336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27afbdfc83e47004e95ef7726ed4a9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 2000000
-  MinSpeed: 30000
+  MaxSpeed: 20000
+  MinSpeed: 300
 --- !u!114 &91838854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,14 +547,14 @@ MonoBehaviour:
   m_IsInitialized: 1
   m_LocalPosition:
     x: -2371019.720687084
-    y: 3904527.251519034
+    y: 3904527.2515190346
     z: -4861310.841784997
   m_LocalRotation:
     value:
-      x: -0.30086097
-      y: 0.59494543
-      z: -0.27000546
-      w: 0.69470835
+      x: 0.30086097
+      y: -0.59494543
+      z: 0.27000546
+      w: -0.69470835
   m_LocalScale:
     x: 1
     y: 1
@@ -1164,6 +1164,7 @@ MonoBehaviour:
   TreePrefab: {fileID: 6865095365647609902, guid: a0f2f5d70f407074e8dfb27ae22631f6, type: 3}
   Trees: []
   ArcGISCamera: {fileID: 91838854}
+  TreeSelector: {fileID: 338373441}
 --- !u!1 &916334022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,8 +1788,8 @@ MonoBehaviour:
   enableExtent: 1
   extent:
     GeographicCenter:
-      x: 9.9872
-      y: 53.5488
+      x: 0
+      y: 0
       z: 0
       SRWkid: 4326
     ExtentShape: 0
@@ -1797,9 +1798,9 @@ MonoBehaviour:
       y: 0
   layers: []
   originPosition:
-    x: 9.9872
-    y: 53.5488
-    z: 3000
+    x: 9.987199999999998
+    y: 53.54880000000001
+    z: 3000.0000000003274
     SRWkid: 4326
   mapType: 0
   editorModeEnabled: 1
@@ -1824,7 +1825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_LocalPosition:
-    x: 3741933.028426564
+    x: 3741933.0284265634
     y: 5109479.318787086
     z: 658941.8401171559
   m_LocalRotation:
