@@ -283,8 +283,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91838849}
-  m_LocalRotation: {x: -0.38300055, y: 0.8509316, z: 0.34006855, w: 0.11653019}
-  m_LocalPosition: {x: -4376444, y: -5114920.5, z: 4896694.5}
+  m_LocalRotation: {x: 0.1609267, y: 0.527428, z: -0.1025216, w: 0.82789594}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -316,14 +316,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position:
-    x: -116.00000000000001
-    y: 36.000000000000014
-    z: 299999.99999999994
+    x: 13.3501
+    y: 52.5145
+    z: 3000
     SRWkid: 4326
   rotation:
-    Heading: 64.999999615974
-    Pitch: 67.99999929944107
-    Roll: 359.9999984017386
+    Heading: 65
+    Pitch: 68
+    Roll: 0
 --- !u!114 &91838853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27afbdfc83e47004e95ef7726ed4a9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 20000
+  MaxSpeed: 2000
   MinSpeed: 300
 --- !u!114 &91838854
 MonoBehaviour:
@@ -546,15 +546,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IsInitialized: 1
   m_LocalPosition:
-    x: -2371019.720687084
-    y: 3904527.2515190346
-    z: -4861310.841784997
+    x: 1486126.3340392816
+    y: 3000
+    z: 6893693.66403521
   m_LocalRotation:
     value:
-      x: 0.30086097
-      y: -0.59494543
-      z: 0.27000546
-      w: -0.69470835
+      x: 0.16092667
+      y: 0.5274279
+      z: -0.1025216
+      w: 0.827896
   m_LocalScale:
     x: 1
     y: 1
@@ -1785,11 +1785,11 @@ MonoBehaviour:
     IsEnabled: 1
     Authentication:
       ConfigurationIndex: -1
-  enableExtent: 1
+  enableExtent: 0
   extent:
     GeographicCenter:
-      x: 0
-      y: 0
+      x: 9.9872
+      y: 53.5488
       z: 0
       SRWkid: 4326
     ExtentShape: 0
@@ -1798,11 +1798,11 @@ MonoBehaviour:
       y: 0
   layers: []
   originPosition:
-    x: 9.987199999999998
-    y: 53.54880000000001
-    z: 3000.0000000003274
+    x: 13.3501
+    y: 52.5145
+    z: 3000
     SRWkid: 4326
-  mapType: 0
+  mapType: 1
   editorModeEnabled: 1
   dataFetchWithSceneView: 1
   rebaseWithSceneView: 0
@@ -1825,15 +1825,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_LocalPosition:
-    x: 3741933.0284265634
-    y: 5109479.318787086
-    z: 658941.8401171559
+    x: 1486126.3340392816
+    y: 3000
+    z: 6893693.66403521
   m_LocalRotation:
     value:
-      x: -0.20106412
-      y: -0.7275458
-      z: -0.23956455
-      w: 0.6106219
+      x: 0
+      y: 0
+      z: 0
+      w: 1
 --- !u!114 &1808036067
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
 //
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +16,7 @@ using Esri.GameEngine.Geometry;
 // in order to leverage Unity's JsonUtility.
 // When implementing your own version of this the Baseball Properties would need to 
 // be updated.
+
 [System.Serializable]
 public class FeatureCollectionData
 {
@@ -29,6 +30,7 @@ public class Feature
     public string type;
     public Geometry geometry;
     public TreeProperties properties;
+    
 }
 
 [System.Serializable]
@@ -50,7 +52,7 @@ public class Geometry
 // with correct property values. This is a good starting point if you are looking to parse your own feature layer into Unity.
 public class FeatureLayerQuery : MonoBehaviour
 {
-    // The feature layer we are going to query
+    // The preview of this service is here https://runtime.maps.arcgis.com/home/item.html?id=05c3f9d7dea6422b86e30967811bddd7
     public string FeatureLayerURL = "https://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Baumkataster_Berlin/FeatureServer/0";
 
     // This prefab will be instatiated for each feature we parse
@@ -76,9 +78,17 @@ public class FeatureLayerQuery : MonoBehaviour
         TreeSelector.onValueChanged.AddListener(delegate
         {
             TreeSelected();
-        });
+        }); 
     }
-
+    private Dictionary<string, string> genusToPrefabPath = new Dictionary<string, string>
+    {
+        { "ACER", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_EU01_AcerCampestre_A_LOD0.fbx" },
+        { "MELALEUCA", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_OC56_MelaleucaAlternifolia_Y_LOD0" },
+        { "DRACAENA,", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_AF08_DracaenaDraco_A_LOD0.fbx" },
+        { "NERIUM", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_BS09_NeriumOleander_A_LOD0.fbx" },
+        { "CEDRUS", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_CL04_CalocedrusDecurrens_A_LOD0.fbx.fbx" },
+        
+    };
     // Sends the Request to get features from the service
     private IEnumerator GetFeatures()
     {
@@ -95,7 +105,7 @@ public class FeatureLayerQuery : MonoBehaviour
         }
         else
         {
-           
+
             CreateGameObjectsFromResponse(Request.downloadHandler.text);
             PopulateTreeDropdown();
         }
@@ -130,16 +140,33 @@ public class FeatureLayerQuery : MonoBehaviour
                 OutFieldHeader += ",";
             }
         }
-        string district = "Mitte";
+       // string district = "Mitte";
+        /*
         string[] RequestHeaders =
         {
             "f=geojson",
             $"where=bezirk%3D%27{district}%27",
             "outSR=" + FeatureSRWKID.ToString(),
             OutFieldHeader,
-            "resultRecordCount=500"
+            "resultRecordCount=1500"
         };
-
+        */
+        double lat = 52.5145;
+        double lon = 13.3501;
+        int radius = 1000;
+        string[] RequestHeaders =
+    {
+        "f=geojson",
+        "geometryType=esriGeometryPoint",
+        $"geometry={lon},{lat}",
+        "spatialRel=esriSpatialRelIntersects",
+        $"distance={radius}",
+        "units=esriSRUnit_Meter",
+        "inSR=" + FeatureSRWKID.ToString(),
+        "outSR=" + FeatureSRWKID.ToString(),
+        OutFieldHeader,
+       
+    };
         string ReturnValue = "";
         for (int i = 0; i < RequestHeaders.Length; i++)
         {
@@ -166,12 +193,31 @@ public class FeatureLayerQuery : MonoBehaviour
         {
             double Longitude = feature.geometry.coordinates[0];
             double Latitude = feature.geometry.coordinates[1];
+            string genus = feature.properties.genus;
+            double crownDiameter = Convert.ToDouble(feature.properties.crown);
+            double height = Convert.ToDouble(feature.properties.height);
 
             ArcGISPoint Position = new ArcGISPoint(Longitude, Latitude, TreeSpawnHeight, new ArcGISSpatialReference(FeatureSRWKID));
+            float scaleHeight = (float)(height / TreePrefab.transform.localScale.y);
+            float scaleCrown = (float)(crownDiameter / TreePrefab.transform.localScale.x);
 
-            var NewTree = Instantiate(TreePrefab, this.transform);
-            
-            NewTree.name = feature.properties.genus +"_"+counter.ToString();
+
+            GameObject NewTree;
+            string prefabPath;
+            if (genus!=null && genusToPrefabPath.TryGetValue(genus, out prefabPath))
+            {
+               NewTree = Instantiate((GameObject)Resources.Load(prefabPath), this.transform);
+                Debug.LogWarning($"found trees");
+
+            }
+       /*     else
+			{
+                NewTree = Instantiate(TreePrefab, this.transform);
+             //   Debug.LogWarning($"Genus '{genus}' not found in the dictionary. Skipping this tree.");
+            }*/
+
+            NewTree.transform.localScale = new Vector3(scaleCrown, scaleHeight, scaleCrown);
+            NewTree.name = feature.properties.genus + "_" + counter.ToString();
             counter++;
             Trees.Add(NewTree);
             NewTree.SetActive(true);

@@ -11,6 +11,7 @@ using Esri.GameEngine.Geometry;
 using Esri.HPFramework;
 
 
+
 // This class holds information for each stadium, controls how they are rendered, and
 // also is responsible for placing the object on the surface of the Earth using a raycast.
 // For the raycast to properly work ArcGISMapViewComponent.UseMeshColliders has to be true.
@@ -42,6 +43,8 @@ public class Tree : MonoBehaviour
 
     public void Start()
     {
+        // Your existing code
+
         StartCoroutine(SetOnGround());
     }
 
@@ -53,11 +56,18 @@ public class Tree : MonoBehaviour
     // Another way to get the elevation would be to query/identify the elevation service you are using for each
     // feature to discover the altitude
 
-
+   
     private IEnumerator SetOnGround()
     {
-        while(!OnGround)
-		{
+        //updating position multiple times to increase positioning accuracy
+        //you can modify this number to place the object more accurately 
+        int maxAttempts = 30; // maximum number of attempts
+        int currentAttempt = 0;
+
+        while (!OnGround && currentAttempt < maxAttempts)
+        {
+            currentAttempt++;
+
             var CameraHP = ArcGISCamera.GetComponent<HPTransform>();
             var HP = transform.GetComponent<HPTransform>();
             var Distance = (CameraHP.UniversePosition - HP.UniversePosition).ToVector3().magnitude;
@@ -71,17 +81,17 @@ public class Tree : MonoBehaviour
                     double NewHeight = TreeLocationComponent.Position.Z - hitInfo.distance;
                     double TreeLongitude = TreeLocationComponent.Position.X;
                     double TreeLatitude = TreeLocationComponent.Position.Y;
-                    ArcGISPoint Position = new ArcGISPoint(TreeLongitude, TreeLatitude, NewHeight, TreeLocationComponent.Position.SpatialReference);
+                    ArcGISPoint Position = new ArcGISPoint(TreeLongitude, TreeLatitude, NewHeight+0.5, TreeLocationComponent.Position.SpatialReference);
                     TreeLocationComponent.Position = Position;
 
                     OnGround = true;
-                    MeshRenderer treeMeshRenderer = GetComponent<MeshRenderer>();
-                    treeMeshRenderer.enabled = true;
                 }
             }
-            yield return null;
+            // Wait for a short period before trying again
+            yield return new WaitForSeconds(0.1f);
         }
-        
     }
+
+    
 
 }
