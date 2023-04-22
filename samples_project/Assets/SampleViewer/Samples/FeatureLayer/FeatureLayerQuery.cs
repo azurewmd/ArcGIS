@@ -32,14 +32,6 @@ public class Feature
     public TreeProperties properties;
     
 }
-[System.Serializable]
-public class DatasetProperties
-{
-    public string gattung;
-    public string kronedurch;
-    public string baumhoehe;
-}
-
 
 [System.Serializable]
 public class TreeProperties
@@ -88,15 +80,14 @@ public class FeatureLayerQuery : MonoBehaviour
             TreeSelected();
         }); 
     }
-
     private Dictionary<string, string> genusToPrefabPath = new Dictionary<string, string>
     {
-        { "ACER", "TreeModels/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_EU01_AcerCampestre_A_LOD0" },
-        { "MELALEUCA", "TreeModels/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_OC56_MelaleucaAlternifolia_Y_LOD0" },
-        { "DRACAENA,", "TreeModels/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_AF08_DracaenaDraco_A_LOD0" },
-        { "NERIUM", "TreeModels/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_BS09_NeriumOleander_A_LOD0" },
-        { "CEDRUS", "TreeModels/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_CL04_CalocedrusDecurrens_A_LOD0" },
-        { "DEFAULT", "TreeModels/TreePrefab" }
+        { "ACER", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_EU01_AcerCampestre_A_LOD0.fbx" },
+        { "MELALEUCA", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_OC56_MelaleucaAlternifolia_Y_LOD0" },
+        { "DRACAENA,", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_AF08_DracaenaDraco_A_LOD0.fbx" },
+        { "NERIUM", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_BS09_NeriumOleander_A_LOD0.fbx" },
+        { "CEDRUS", "Assets/XFrog/2022_PBR_XfrogPlants_Sampler/Prefabs/MESH_CL04_CalocedrusDecurrens_A_LOD0.fbx.fbx" },
+        
     };
     // Sends the Request to get features from the service
     private IEnumerator GetFeatures()
@@ -114,6 +105,7 @@ public class FeatureLayerQuery : MonoBehaviour
         }
         else
         {
+
             CreateGameObjectsFromResponse(Request.downloadHandler.text);
             PopulateTreeDropdown();
         }
@@ -199,15 +191,6 @@ public class FeatureLayerQuery : MonoBehaviour
         int counter = 0;
         foreach (Feature feature in deserialized.features)
         {
-            DatasetProperties datasetProperties = JsonUtility.FromJson<DatasetProperties>(JsonUtility.ToJson(feature.properties));
-
-            // Copy the values from the dataset to your TreeProperties class
-            TreeProperties treeProperties = new TreeProperties
-            {
-                genus = datasetProperties.gattung,
-                crown = datasetProperties.kronedurch,
-                height = datasetProperties.baumhoehe
-            };
             double Longitude = feature.geometry.coordinates[0];
             double Latitude = feature.geometry.coordinates[1];
             string genus = feature.properties.genus;
@@ -221,12 +204,18 @@ public class FeatureLayerQuery : MonoBehaviour
 
             GameObject NewTree;
             string prefabPath;
-
-            if (string.IsNullOrEmpty(genus) || !genusToPrefabPath.TryGetValue(genus, out prefabPath))
+            if (genus!=null && genusToPrefabPath.TryGetValue(genus, out prefabPath))
             {
-                prefabPath = genusToPrefabPath["DEFAULT"];
+               NewTree = Instantiate((GameObject)Resources.Load(prefabPath), this.transform);
+                Debug.LogWarning($"found trees");
+
             }
-            NewTree = Instantiate((GameObject)Resources.Load(prefabPath), this.transform);
+       /*     else
+			{
+                NewTree = Instantiate(TreePrefab, this.transform);
+             //   Debug.LogWarning($"Genus '{genus}' not found in the dictionary. Skipping this tree.");
+            }*/
+
             NewTree.transform.localScale = new Vector3(scaleCrown, scaleHeight, scaleCrown);
             NewTree.name = feature.properties.genus + "_" + counter.ToString();
             counter++;
