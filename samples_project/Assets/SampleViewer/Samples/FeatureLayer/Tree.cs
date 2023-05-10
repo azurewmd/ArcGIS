@@ -61,7 +61,7 @@ public class Tree : MonoBehaviour
     {
         //updating position multiple times to increase positioning accuracy
         //you can modify this number to place the object more accurately 
-        int maxAttempts = 30; // maximum number of attempts
+        int maxAttempts = 300; // maximum number of attempts
         int currentAttempt = 0;
 
         while (!OnGround && currentAttempt < maxAttempts)
@@ -88,7 +88,7 @@ public class Tree : MonoBehaviour
                 }
             }
             // Wait for a short period before trying again
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
