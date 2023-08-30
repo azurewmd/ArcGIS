@@ -141,20 +141,28 @@ public class StreamLayerWebSocketSubscribe : MonoBehaviour
         if (wsClient == null)
         {
             wsClient = new ClientWebSocket();
-            await wsClient.ConnectAsync(new Uri(wsUrl), CancellationToken.None);
-            byte[] buffer = new byte[10240];
-            while (wsClient.State == WebSocketState.Open)
-            {
-                var result = await wsClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.MessageType == WebSocketMessageType.Close)
+			try
+			{
+                await wsClient.ConnectAsync(new Uri(wsUrl), CancellationToken.None);
+                byte[] buffer = new byte[10240];
+                while (wsClient.State == WebSocketState.Open)
                 {
-                    await wsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                }
-                else
-                {
-                    HandleMessage(buffer, result.Count);
+                    var result = await wsClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    if (result.MessageType == WebSocketMessageType.Close)
+                    {
+                        await wsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    }
+                    else
+                    {
+                        HandleMessage(buffer, result.Count);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to connect to server: {ex.Message}");
+            }
+
         }
     }
 
