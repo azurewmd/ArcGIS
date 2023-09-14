@@ -422,6 +422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxSpeed: 2000000
   MinSpeed: 30000
+  IgnoreUI: 0
 --- !u!114 &91838854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1223,11 +1224,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c395c22f6e7a74c4a8ede3782042cc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FeatureLayerURL: https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Major_League_Baseball_Stadiums/FeatureServer/0
+  FeatureLayerURL: https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0
   StadiumPrefab: {fileID: 6815625023641715184, guid: e1518c14a09eb5e4e9287179e0c981a5, type: 3}
   Stadiums: []
   ArcGISCamera: {fileID: 91838854}
-  StadiumSelector: {fileID: 1599922244}
+  RayCastDistanceThreshold: 300000
 --- !u!1 &916334022
 GameObject:
   m_ObjectHideFlags: 0
@@ -2317,6 +2318,7 @@ MonoBehaviour:
     ShapeDimensions:
       x: 0
       y: 0
+    UseOriginAsCenter: 0
   layers: []
   originPosition:
     x: -116
@@ -2513,7 +2515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -82.9, y: -102}
+  m_AnchoredPosition: {x: -82.8999, y: -102}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720973319062841972

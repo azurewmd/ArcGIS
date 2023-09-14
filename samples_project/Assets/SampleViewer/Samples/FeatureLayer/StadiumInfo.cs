@@ -91,7 +91,7 @@ public class StadiumInfo : MonoBehaviour
     // at so the hit test wouldn't work for objects that don't have loaded terrain underneath them
     // Another way to get the elevation would be to query/identify the elevation service you are using for each
     // feature to discover the altitude
-    private void SetOnGround()
+    public void SetOnGround()
     {
         var CameraHP = ArcGISCamera.GetComponent<HPTransform>();
         var StadiumHP = transform.GetComponent<HPTransform>();
@@ -109,7 +109,7 @@ public class StadiumInfo : MonoBehaviour
                 ArcGISPoint Position = new ArcGISPoint(StadiumLongitude, StadiumLatitude, NewHeight, StadiumLocationComponent.Position.SpatialReference);
                 StadiumLocationComponent.Position = Position;
 
-                OnGround = true;
+                //    OnGround = true;
 
                 // The features were not being rendered until they are placed on the ground
                 StadiumRender.transform.parent.gameObject.SetActive(true);

@@ -8,7 +8,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 using Esri.ArcGISMapsSDK.Components;
 using Esri.ArcGISMapsSDK.Samples.Components;
 using Esri.GameEngine.Geometry;
@@ -31,15 +30,6 @@ public class Feature
 {
     public string type;
     public Geometry geometry;
-    public BaseballProperties properties;
-}
-
-[System.Serializable]
-public class BaseballProperties
-{
-    public string LEAGUE;
-    public string TEAM;
-    public string NAME;
 }
 
 [System.Serializable]
@@ -48,13 +38,25 @@ public class Geometry
     public string type;
     public double[] coordinates;
 }
+/*
+[System.Serializable]
+public class BaseballProperties
+{
+    public string OBJECTID;
+}
+*/
+
 
 // This class issues a query request to a Feature Layer which it then parses to create GameObjects at accurate locations
 // with correct property values. This is a good starting point if you are looking to parse your own feature layer into Unity.
 public class FeatureLayerQuery : MonoBehaviour
 {
     // The feature layer we are going to query
-    [SerializeField] private string FeatureLayerURL = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Major_League_Baseball_Stadiums/FeatureServer/0";
+    [SerializeField]
+    private string FeatureLayerURL = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Recent_Hurricanes_v1/FeatureServer/0";
+    // private string FeatureLayerURL = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0";
+    //  [SerializeField] private string FeatureLayerURL = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USGS_Seismic_Data_v1/FeatureServer";
+    //original: https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Major_League_Baseball_Stadiums/FeatureServer/0
 
     // This prefab will be instatiated for each feature we parse
     [SerializeField] private GameObject StadiumPrefab;
@@ -71,18 +73,20 @@ public class FeatureLayerQuery : MonoBehaviour
 
     // This camera reference will be passed to the stadiums to calculate the distance from the camera to each stadium
     [SerializeField] private ArcGISCameraComponent ArcGISCamera;
-
-    [SerializeField] private TMP_Dropdown StadiumSelector;
-
+    private const float RaycastHeight = 5000f;
+    private ArcGISMapComponent arcGISMapComponent;
+    // [SerializeField] private TMP_Dropdown StadiumSelector;
+    public double RayCastDistanceThreshold = 300000;
     // Get all the features when the script starts
     private void Start()
     {
         StartCoroutine(GetFeatures());
-       
-        StadiumSelector.onValueChanged.AddListener(delegate
-        {
-            StadiumSelected();
-        });
+        arcGISMapComponent = FindObjectOfType<ArcGISMapComponent>();
+        /*
+         StadiumSelector.onValueChanged.AddListener(delegate
+         {
+             StadiumSelected();
+         });*/
     }
 
     private void Update()
@@ -114,7 +118,7 @@ public class FeatureLayerQuery : MonoBehaviour
         else
         {
             CreateGameObjectsFromResponse(Request.downloadHandler.text);
-            PopulateStadiumDropdown();
+           // PopulateStadiumDropdown();
         }
     }
 
@@ -123,14 +127,12 @@ public class FeatureLayerQuery : MonoBehaviour
     // where=1=1 gets every feature. geometry based or more intelligent where clauses should be used
     //     with larger datasets
     // outSR=4326 gets the return geometries in the SR 4326
-    // outFields=LEAGUE,TEAM,NAME specifies the fields we want in the response
+
     private string MakeRequestHeaders()
     {
         string[] OutFields =
         {
-            "LEAGUE",
-            "TEAM",
-            "NAME"
+            "OBJECTID"
         };
 
         string OutFieldHeader = "outFields=";
@@ -182,25 +184,43 @@ public class FeatureLayerQuery : MonoBehaviour
             ArcGISPoint Position = new ArcGISPoint(Longitude, Latitude, StadiumSpawnHeight, new ArcGISSpatialReference(FeatureSRWKID));
 
             var NewStadium = Instantiate(StadiumPrefab, this.transform);
-            NewStadium.name = feature.properties.NAME;
+      //      NewStadium.name = feature.properties.NAME;
             Stadiums.Add(NewStadium);
             NewStadium.SetActive(true);
-
+           // SetElevation(NewStadium);
             var LocationComponent = NewStadium.GetComponent<ArcGISLocationComponent>();
             LocationComponent.enabled = true;
             LocationComponent.Position = Position;
 
             var StadiumInfo = NewStadium.GetComponent<StadiumInfo>();
-
-            StadiumInfo.SetInfo(feature.properties.NAME);
-            StadiumInfo.SetInfo(feature.properties.TEAM);
-            StadiumInfo.SetInfo(feature.properties.LEAGUE);
+            
+           // StadiumInfo.SetInfo(feature.properties.NAME);
+            //StadiumInfo.SetInfo(feature.properties.TEAM);
+            //StadiumInfo.SetInfo(feature.properties.LEAGUE);
 
             StadiumInfo.ArcGISCamera = ArcGISCamera;
-            StadiumInfo.SetSpawnHeight(StadiumSpawnHeight);
+            //StadiumInfo.SetSpawnHeight(StadiumSpawnHeight);
+            
         }
     }
-
+    /*
+    private void SetElevation(GameObject stop)
+    {
+         
+    // Start the raycast in the air at an arbitrary to ensure it is above the ground.
+        var position = stop.transform.position;
+        var raycastStart = new Vector3(position.x, position.y + RaycastHeight, position.z);
+        if (Physics.Raycast(raycastStart, Vector3.down, out RaycastHit hitInfo))
+        {
+            Debug.Log("Hit at: " + hitInfo.point);
+            stop.transform.position = hitInfo.point;
+        }
+        else
+        {
+            Debug.Log("Did not hit anything.");
+        }
+    }*./
+    /* 
     // Populates the stadium drown down with all the stadium names from the Stadiums list
     private void PopulateStadiumDropdown()
     {
@@ -238,7 +258,7 @@ public class FeatureLayerQuery : MonoBehaviour
             }
         }
     }
-
+    */
     private bool MouseOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
