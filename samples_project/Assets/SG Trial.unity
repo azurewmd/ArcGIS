@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 37.191013, g: 35.92066, b: 52.097755, a: 1}
+  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -388,8 +388,8 @@ MonoBehaviour:
   enableExtent: 1
   extent:
     GeographicCenter:
-      x: 103.8198
-      y: 1.3521
+      x: 103.83
+      y: 1.32
       z: 0
       SRWkid: 4326
     ExtentShape: 2
@@ -399,8 +399,8 @@ MonoBehaviour:
     UseOriginAsCenter: 0
   layers: []
   originPosition:
-    x: -74
-    y: 41
+    x: 103.8198
+    y: 1.3521
     z: 0
     SRWkid: 4326
   mapType: 1
@@ -426,9 +426,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_LocalPosition:
-    x: -8237642.318702245
+    x: 11557167.270259505
     y: 0
-    z: 5012341.663847515
+    z: 150529.05559896483
   m_LocalRotation:
     value:
       x: 0
@@ -562,8 +562,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  far clip plane: 17500
+  field of view: 86
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -588,14 +588,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823688464}
-  m_LocalRotation: {x: 0.24449334, y: 0.44386125, z: -0.12727518, w: 0.8526495}
-  m_LocalPosition: {x: 19794832, y: 3000, z: -4862046.5}
+  m_LocalRotation: {x: 0.2934096, y: 0.39985836, z: -0.13681914, w: 0.85749906}
+  m_LocalPosition: {x: -7834.126, y: 3325, z: -5504.836}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 159858860}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 37.779, y: 50, z: 0}
 --- !u!114 &1823688468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,14 +738,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position:
-    x: 103.82
-    y: 1.35
-    z: 3000
+    x: 103.74942484950408
+    y: 1.3026624894582441
+    z: 3325.0000762939453
     SRWkid: 4326
   rotation:
-    Heading: 55
-    Pitch: 58
-    Roll: 0
+    Heading: 49.999997397632995
+    Pitch: 52.22128732215276
+    Roll: 359.99999868545194
 --- !u!114 &1823688470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,15 +779,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IsInitialized: 1
   m_LocalPosition:
-    x: 11557189.534157662
-    y: 3000
-    z: 150295.21966149483
+    x: 11549333.144341797
+    y: 3325.0000762939453
+    z: 145024.21972253
   m_LocalRotation:
     value:
-      x: 0.24449332
-      y: 0.44386125
-      z: -0.12727517
-      w: 0.8526495
+      x: 0.2934096
+      y: 0.39985836
+      z: -0.13681914
+      w: 0.85749906
   m_LocalScale:
     x: 1
     y: 1
